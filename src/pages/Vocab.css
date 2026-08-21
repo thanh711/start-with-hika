@@ -1,0 +1,19 @@
+.vocab-container { width: 100%; min-height: 100vh; margin: 0; padding: 16px; background: #0f1219; color: #e5e7eb; box-sizing: border-box; }
+.page-top-title.vocab h1 { color: #a78bfa; }
+.mode-toggle button.active.easy { background: #22c55e; border-color: #22c55e; color: black; }
+.mode-toggle button.active.normal { background: #3b82f6; border-color: #3b82f6; color: white; }
+.mode-toggle button.active.hard { background: #ef4444; border-color: #ef4444; color: white; }
+
+.vocab-card { margin-top: 8px; }
+.vocab-kana { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 12px 0 4px 0; cursor: pointer; user-select: none; padding: 12px; border-radius: 14px; background: #0f1219; border: 1px dashed #2a344b; transition: 0.2s; }
+.vocab-kana:active { transform: scale(0.98); background: #1c2333; }
+.vocab-kana b { font-size: 48px; color: white; line-height: 1; }
+.vocab-kana span { font-size: 18px; color: #94a3b8; }
+.tap-hint { font-size: 10px; color: #64748b; margin-top: 6px; }
+
+.vocab-roma { font-size: 16px; color: #a78bfa; margin-bottom: 16px; letter-spacing: 1px; height: 22px; transition: 0.2s; }
+.vocab-roma:not(.show) { color: #2a344b; letter-spacing: 4px; }
+.vocab-roma.show { color: #a78bfa; }
+
+.vocab-q { font-size: 13px; color: #a78bfa; margin-bottom: 12px; font-weight: 600; }
+.choice-grid.vocab-grid.choice-btn { font-size: 16px; text-transform: lowercase; }

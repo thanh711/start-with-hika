@@ -1,0 +1,8 @@
+/* Màu riêng cho các mode - phần chung đã ở common.css */
+.mode-toggle button.active.hira { background: #ec4899; border-color: #ec4899; color: white; }
+.mode-toggle button.active.kata { background: #3b82f6; border-color: #3b82f6; color: white; }
+.mode-toggle button.active.mix { background: #8b5cf6; border-color: #8b5cf6; color: white; }
+.mode-toggle button.active.hard { background: #ef4444; border-color: #ef4444; color: white; }
+.mode-toggle button.active.asian { background: #f59e0b; border-color: #f59e0b; color: black; }
+.input-row input:focus { border-color: #f59e0b; }
+.input-row button { background: #f59e0b; color: black; }

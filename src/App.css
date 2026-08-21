@@ -1,22 +1,5 @@
-.app-layout {
-  display: flex;
-  width: 100%;
-  min-height: 100vh;
-  background: #0f1219;
-}
-
-.main-content {
-  flex: 1;
-  margin-left: 252px; /* 220 + 32 */
-  width: calc(100% - 252px);
-  min-height: 100vh;
-  background: #0f1219;
-}
-
+.app-layout { display: flex; width: 100%; min-height: 100vh; background: #0f1219; }
+.main-content { flex: 1; margin-left: 252px; width: calc(100% - 252px); min-height: 100vh; background: #0f1219; }
 @media (max-width: 768px) {
-  .main-content {
-    margin-left: 0;
-    width: 100%;
-    padding-top: 56px; /* chừa chỗ cho header */
-  }
+  .main-content { margin-left: 0; width: 100%; padding-top: 56px; }
 }

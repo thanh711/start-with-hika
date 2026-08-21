@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Katakana.css";
 
 type Cell = { kana: string; roma: string };
@@ -30,92 +31,99 @@ const YOUON_ROWS: YouonRow[] = [
 ];
 
 export default function Katakana() {
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [expandedYouon, setExpandedYouon] = useState<Set<string>>(new Set());
+  const [showYouon, setShowYouon] = useState(true);
+  const [showChouon, setShowChouon] = useState(true);
+  const [showSokuon, setShowSokuon] = useState(true);
 
   const toggle = (id: string) => {
     const s = new Set(expanded);
-    s.has(id) ? s.delete(id) : s.add(id);
+    s.has(id)? s.delete(id) : s.add(id);
     setExpanded(s);
   };
   const toggleYouon = (id: string) => {
     const s = new Set(expandedYouon);
-    s.has(id) ? s.delete(id) : s.add(id);
+    s.has(id)? s.delete(id) : s.add(id);
     setExpandedYouon(s);
   };
 
   return (
     <div className="kana-container dark">
-      <h1>カタカナ 46</h1>
+      <div className="page-top-title kata">
+        <h1>カタカナ</h1>
+        <p>Katakana - Bảng chữ cứng • 46 âm cơ bản + âm ghép, trường âm ー, ngắt âm ッ</p>
+      </div>
+
+      <div className="section-header">
+        <div className="section-title-left"><span className="num blue">1</span><h2>Bảng chữ cái</h2></div>
+        <button className="learn-btn blue" onClick={() => navigate('/learn?mode=kata')}>Học</button>
+      </div>
+
       <div className="kana-table">
         {ROWS.map(row => {
-          const hasDaku = !!(row.dakuon || row.handakuon);
+          const hasDaku =!!(row.dakuon || row.handakuon);
           const isOpen = expanded.has(row.id);
           return (
             <div key={row.id} className="row-group">
-              <div className={`kana-row ${hasDaku ? 'has-daku' : ''} ${isOpen ? 'open' : ''}`} onClick={() => hasDaku && toggle(row.id)}>
-                {row.base.map((cell, i) => cell ? (
-                  <div key={i} className="kana-cell"><b>{cell.kana}</b><small>{cell.roma}</small></div>
-                ) : (
-                  <div key={i} className="kana-cell empty"></div>
-                ))}
+              <div className={`kana-row ${hasDaku? 'has-daku' : ''} ${isOpen? 'open' : ''}`} onClick={() => hasDaku && toggle(row.id)}>
+                {row.base.map((cell, i) => cell? <div key={i} className="kana-cell"><b>{cell.kana}</b><small>{cell.roma}</small></div> : <div key={i} className="kana-cell empty"></div>)}
               </div>
-              {isOpen && row.dakuon && (
-                <div className="kana-row dakuon-row">
-                  {row.dakuon.map((c, i) => c ? <div key={i} className="kana-cell daku"><b>{c.kana}</b><small>{c.roma}</small></div> : <div key={i} className="kana-cell empty"></div>)}
-                </div>
-              )}
-              {isOpen && row.handakuon && (
-                <div className="kana-row handakuon-row">
-                  {row.handakuon.map((c, i) => c ? <div key={i} className="kana-cell handaku"><b>{c.kana}</b><small>{c.roma}</small></div> : <div key={i} className="kana-cell empty"></div>)}
-                </div>
-              )}
+              {isOpen && row.dakuon && <div className="kana-row dakuon-row">{row.dakuon.map((c,i) => c? <div key={i} className="kana-cell daku"><b>{c.kana}</b><small>{c.roma}</small></div> : <div key={i} className="kana-cell empty"></div>)}</div>}
+              {isOpen && row.handakuon && <div className="kana-row handakuon-row">{row.handakuon.map((c,i) => c? <div key={i} className="kana-cell handaku"><b>{c.kana}</b><small>{c.roma}</small></div> : <div key={i} className="kana-cell empty"></div>)}</div>}
             </div>
           );
         })}
       </div>
 
-      <h2 className="section-title">1. Âm ghép Youon (拗音)</h2>
-      <div className="explain-box">
-        <p><b>Cách tạo:</b> Cột <code>i</code> + ヤユヨ nhỏ (ャュョ) → Bỏ <code>i</code>. Ví dụ: キ + ャ = キャ (kya)</p>
-        <p className="hint-small">Hàng màu xanh nhạt có âm đục / bán đục, bấm để xem.</p>
+      <div className="section-header">
+        <div className="section-title-left"><span className="num blue">2</span><h2>Âm ghép Youon</h2></div>
+        <label className="switch"><input type="checkbox" checked={showYouon} onChange={() => setShowYouon(!showYouon)} /><span className="slider blue"></span></label>
       </div>
-      <div className="youon-grid">
-        {YOUON_ROWS.map(row => {
-          const hasDaku = !!(row.dakuon || row.handakuon);
-          const isOpen = expandedYouon.has(row.id);
-          return (
-            <div key={row.id} className="row-group">
-              <div className={`youon-main ${row.hasColor ? 'has-daku' : ''} ${isOpen ? 'open' : ''}`} onClick={() => hasDaku && toggleYouon(row.id)}>
-                {row.base.map(c => <div key={c.kana} className="kana-cell youon"><b>{c.kana}</b><small>{c.roma}</small></div>)}
-                {hasDaku && <span className="youon-arrow">{isOpen ? '▲' : '▼'}</span>}
-              </div>
-              {isOpen && row.dakuon && (
-                <div className="youon-main dakuon-row">
-                  {row.dakuon.map(c => <div key={c.kana} className="kana-cell daku"><b>{c.kana}</b><small>{c.roma}</small></div>)}
+      {showYouon && (
+        <>
+          <div className="explain-box"><p><b>Cách tạo:</b> Cột <code>i</code> + ヤユヨ nhỏ (ャュョ) → Bỏ <code>i</code>. Ví dụ: キ + ャ = キャ (kya)</p><p className="hint-small">Hàng xanh nhạt có âm đục / bán đục, bấm để xem.</p></div>
+          <div className="youon-grid">
+            {YOUON_ROWS.map(row => {
+              const hasDaku =!!(row.dakuon || row.handakuon);
+              const isOpen = expandedYouon.has(row.id);
+              return (
+                <div key={row.id} className="row-group">
+                  <div className={`youon-main ${row.hasColor? 'has-daku' : ''} ${isOpen? 'open' : ''}`} onClick={() => hasDaku && toggleYouon(row.id)}>
+                    {row.base.map(c => <div key={c.kana} className="kana-cell youon"><b>{c.kana}</b><small>{c.roma}</small></div>)}
+                    {hasDaku && <span className="youon-arrow">{isOpen? '▲' : '▼'}</span>}
+                  </div>
+                  {isOpen && row.dakuon && <div className="youon-main dakuon-row">{row.dakuon.map(c => <div key={c.kana} className="kana-cell daku"><b>{c.kana}</b><small>{c.roma}</small></div>)}</div>}
+                  {isOpen && row.handakuon && <div className="youon-main handakuon-row">{row.handakuon.map(c => <div key={c.kana} className="kana-cell handaku"><b>{c.kana}</b><small>{c.roma}</small></div>)}</div>}
                 </div>
-              )}
-              {isOpen && row.handakuon && (
-                <div className="youon-main handakuon-row">
-                  {row.handakuon.map(c => <div key={c.kana} className="kana-cell handaku"><b>{c.kana}</b><small>{c.roma}</small></div>)}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+              );
+            })}
+          </div>
+        </>
+      )}
 
-      <h2 className="section-title">2. Trường âm Chouon (長音) - ー</h2>
-      <div className="explain-box">
-        <p>Dấu <code>ー</code> kéo dài âm trước nó. Trong Katakana dùng cho tất cả các hàng.</p>
-        <div className="example-list"><div><b>コーヒー</b><span>koohii - cà phê</span></div><div><b>ケーキ</b><span>keeki - bánh kem</span></div></div>
+      <div className="section-header">
+        <div className="section-title-left"><span className="num blue">3</span><h2>Trường âm Chouon ー</h2></div>
+        <label className="switch"><input type="checkbox" checked={showChouon} onChange={() => setShowChouon(!showChouon)} /><span className="slider blue"></span></label>
       </div>
+      {showChouon && (
+        <div className="explain-box">
+          <p>Katakana dùng dấu <code>ー</code> để kéo dài. Khác Hiragana phải thêm nguyên âm.</p>
+          <div className="example-list"><div><b>コーヒー</b><span>koohii - cà phê</span></div><div><b>ケーキ</b><span>keeki - bánh kem</span></div><div><b>コンピューター</b><span>konpyuutaa - máy tính</span></div></div>
+        </div>
+      )}
 
-      <h2 className="section-title">3. Ngắt âm Sokuon (促音) - ッ</h2>
-      <div className="explain-box">
-        <p>Chữ <code>ッ</code> nhỏ tạo ngắt, gấp đôi phụ âm sau.</p>
-        <div className="example-list"><div><b>ベッド</b><span>beddo - giường</span></div><div><b>チケット</b><span>chiketto - vé</span></div></div>
+      <div className="section-header">
+        <div className="section-title-left"><span className="num blue">4</span><h2>Ngắt âm Sokuon ッ</h2></div>
+        <label className="switch"><input type="checkbox" checked={showSokuon} onChange={() => setShowSokuon(!showSokuon)} /><span className="slider blue"></span></label>
       </div>
+      {showSokuon && (
+        <div className="explain-box">
+          <p>Dùng <code>ッ</code> nhỏ tạo ngắt, gấp đôi phụ âm sau.</p>
+          <div className="example-list"><div><b>ベッド</b><span>beddo - giường</span></div><div><b>チケット</b><span>chiketto - vé</span></div></div>
+        </div>
+      )}
     </div>
   );
 }
