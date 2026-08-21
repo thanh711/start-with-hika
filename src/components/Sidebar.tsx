@@ -7,7 +7,8 @@ type MenuItem = { path: string; label: string; shortLabel: string };
 const menu: MenuItem[] = [
   { path: "/", label: "🏠 Trang chủ", shortLabel: "Trang chủ" },
   { path: "/learn", label: "📚 Học tập", shortLabel: "Học tập" },
-  { path: "/kana", label: "🅰️ Bảng chữ Kana", shortLabel: "Bảng Kana" },
+  { path: "/hiragana", label: "🅱️ Hiragana", shortLabel: "Hiragana" },
+  { path: "/kana", label: "🅰️ Katakana", shortLabel: "Katakana" },
   { path: "/setting", label: "⚙️ Cài đặt", shortLabel: "Cài đặt" },
 ];
 
@@ -28,7 +29,6 @@ export default function Sidebar() {
       {open && <div className="overlay" onClick={() => setOpen(false)}></div>}
 
       <div className={`sidebar ${open ? "open" : ""}`}>
-        {/* Bỏ logo Kana App */}
         <nav>
           {menu.map((item) => (
             <Link
