@@ -1,0 +1,13 @@
+{
+  "name": "HiKa",
+  "short_name": "App",
+  "description": "App học bảng chữ cái",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+  { "src": "/start-with-hika/icon-192-purple-a.png", "sizes": "192x192", "type": "image/png" },
+  { "src": "/start-with-hika/icon-512-purple-a.png", "sizes": "512x512", "type": "image/png" }
+]
+}
