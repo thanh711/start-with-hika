@@ -1,0 +1,78 @@
+/* --- PC (giữ nguyên) --- */
+.sidebar {
+  width: 220px;
+  height: calc(100vh - 32px);
+  background: #111827;
+  color: white;
+  padding: 20px;
+  position: fixed;
+  left: 16px;
+  top: 16px;
+  z-index: 100;
+  border-radius: 16px;
+  border: 1px solid #2a344b;
+  transition: transform 0.3s ease;
+}
+.sidebar nav { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+.sidebar a { color: #9ca3af; text-decoration: none; padding: 12px; border-radius: 10px; text-align: left; display: block; }
+.sidebar a.active { background: #3b82f6; color: white; }
+.sidebar a:hover { background: #1f2937; }
+
+.mobile-header { display: none; }
+.overlay { display: none; }
+
+/* --- MOBILE: sổ từ trên xuống --- */
+@media (max-width: 768px) {
+  .sidebar {
+    left: 0;
+    top: 56px;
+    width: 100%;
+    height: auto;
+    padding: 8px 12px 16px;
+    border-radius: 0; /* không bo góc */
+    border: none;
+    border-bottom: 1px solid #2a344b; /* chỉ còn border dưới */
+    transform: translateY(-120%); /* giấu lên trên */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  }
+  .sidebar.open {
+    transform: translateY(0); /* sổ xuống */
+  }
+  .sidebar nav { margin-top: 0; }
+
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    background: #0f1219;
+    border-bottom: 1px solid #2a344b;
+    padding: 0 12px;
+    z-index: 200;
+  }
+
+  .hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1c2333;
+    color: white;
+    border: 1px solid #2a344b;
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+  .header-title { font-size: 16px; font-weight: 600; color: #e5e7eb; }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    top: 56px;
+    background: rgba(0,0,0,0.5);
+    z-index: 90;
+  }
+}
