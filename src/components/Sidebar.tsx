@@ -5,7 +5,7 @@ import "./Sidebar.css";
 type MenuItem = { path: string; label: string; shortLabel: string };
 
 const menu: MenuItem[] = [
-  { path: "/", label: "🏠 Trang chủ", shortLabel: "Trang chủ" },
+  { path: "/home", label: "🏠 Trang chủ", shortLabel: "Trang chủ" },
   { path: "/learn", label: "📚 Học chữ", shortLabel: "Học chữ" },
   { path: "/vocab", label: "📝 Từ vựng", shortLabel: "Từ vựng" },
   { path: "/hiragana", label: "🅱️ Hiragana", shortLabel: "Hiragana" },
