@@ -8,7 +8,7 @@ import Setting from "./pages/Setting";
 import "./styles/common.css";
 import "./App.css";
 import Home from "./pages/Home";
-
+import Test from "./pages/Test";
 
 export default function App() {
   return (
@@ -21,9 +21,12 @@ export default function App() {
             <Route path="/" element={<Navigate to="/vocab" replace />} />
             <Route path="/home" element={<Home />} />
             <Route path="/learn" element={<Learn />} />
+          
+<Route path="/test" element={<Test />} />
             <Route path="/vocab" element={<Vocab />} />
             <Route path="/hiragana" element={<Hiragana />} />
             <Route path="/kana" element={<Katakana />} />
+
             <Route path="/setting" element={<Setting />} />
             {/* Tất cả route lạ -> về home */}
             <Route path="*" element={<Navigate to="/home" replace />} />
