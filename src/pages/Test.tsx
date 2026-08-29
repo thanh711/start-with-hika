@@ -1,48 +1,39 @@
 import { useState, useEffect, useMemo } from "react";
 import "../styles/common.css";
 import "./Test.css";
+import { VOCAB_EASY_KATA } from "../data/vocabEasyKata";
+import type { Vocab } from "../data/vocabEasyKata";
 
-// ---------- DATA MOCK 100 TỪ + 100 CÂU ----------
-type Vocab = { hira: string; kata: string; roma: string; en: string; };
 type Sentence = { hira: string; kata: string; roma: string; en: string; };
 
-const VOCAB_100: Vocab[] = [
-  { hira:"ねこ", kata:"ネコ", roma:"neko", en:"cat" }, { hira:"いぬ", kata:"イヌ", roma:"inu", en:"dog" },
-  { hira:"みず", kata:"ミズ", roma:"mizu", en:"water" }, { hira:"ひと", kata:"ヒト", roma:"hito", en:"person" },
-  { hira:"やま", kata:"ヤマ", roma:"yama", en:"mountain" }, { hira:"かわ", kata:"カワ", roma:"kawa", en:"river" },
-  { hira:"そら", kata:"ソラ", roma:"sora", en:"sky" }, { hira:"はな", kata:"ハナ", roma:"hana", en:"flower" },
-  { hira:"さくら", kata:"サクラ", roma:"sakura", en:"cherry" }, { hira:"でんしゃ", kata:"デンシャ", roma:"densha", en:"train" },
-  { hira:"がっこう", kata:"ガッコウ", roma:"gakkou", en:"school" }, { hira:"ともだち", kata:"トモダチ", roma:"tomodachi", en:"friend" },
-  { hira:"かぞく", kata:"カゾク", roma:"kazoku", en:"family" }, { hira:"たべもの", kata:"タベモノ", roma:"tabemono", en:"food" },
-  { hira:"のみもの", kata:"ノミモノ", roma:"nomimono", en:"drink" }, { hira:"ほん", kata:"ホン", roma:"hon", en:"book" },
-  { hira:"くるま", kata:"クルマ", roma:"kuruma", en:"car" }, { hira:"いえ", kata:"イエ", roma:"ie", en:"house" },
-  { hira:"あさ", kata:"アサ", roma:"asa", en:"morning" }, { hira:"よる", kata:"ヨル", roma:"yoru", en:"night" },
-];
-// auto fill đến 100
-while (VOCAB_100.length < 100) {
-  const base = VOCAB_100[VOCAB_100.length % 20];
-  VOCAB_100.push({...base, hira: base.hira + (VOCAB_100.length % 3 === 0? "う" : ""), roma: base.roma + (VOCAB_100.length) });
-}
-
 const SENTENCE_100: Sentence[] = [
-  { hira:"わたしのなまえはたなかです", kata:"ワタシノナマエハタナカデス", roma:"watashinonamaehatanakadesu", en:"My name is Tanaka" },
-  { hira:"きょうはてんきがいいですね", kata:"キョウハテンキガイイデスネ", roma:"kyouhatenkigaiidesune", en:"Nice weather today" },
-  { hira:"にほんごをべんきょうしています", kata:"ニホンゴヲベンキョウシテイマス", roma:"nihongowobenkyoushiteimasu", en:"I am studying Japanese" },
-  { hira:"まいにちがっこうへいきます", kata:"マイニチガッコウヘイキマス", roma:"mainichigakkouheikimasu", en:"I go to school everyday" },
-  { hira:"このほんはとてもおもしろいです", kata:"コノホンハトテモオモシロイデス", roma:"konohonhatotemoomoshiroidesu", en:"This book is very interesting" },
-  { hira:"さくらがきれいにさきました", kata:"サクラガキレイニサキマシタ", roma:"sakuragakireinisakimashita", en:"Cherry blossoms bloomed beautifully" },
-  { hira:"ともだちとえいがをみました", kata:"トモダチトエイガヲミマシタ", roma:"tomodachitoeigawomimashita", en:"Watched a movie with friend" },
-  { hira:"あさごはんをたべませんでした", kata:"アサゴハンヲタベマセンデシタ", roma:"asagohanwotabemasendeshita", en:"Didn't eat breakfast" },
-  { hira:"でんしゃがおくれてしまいました", kata:"デンシャガオクレテシマイマシタ", roma:"denshagaokureteshimaimashita", en:"Train was delayed" },
-  { hira:"にほんへいきたいとおもいます", kata:"ニホンヘイキタイトオモイマス", roma:"nihonheikitaito omoimasu", en:"I want to go to Japan" },
+  { hira:"わたしのなまえはたなかです", kata:"ワタシノナマエハタナカデス", roma:"watashinonamaehatanakadesu", en:"Tên tôi là Tanaka" },
+  { hira:"きょうはてんきがいいですね", kata:"キョウハテンキガイイデスネ", roma:"kyouhatenkigaiidesune", en:"Hôm nay thời tiết đẹp nhỉ" },
+  { hira:"にほんごをべんきょうしています", kata:"ニホンゴヲベンキョウシテイマス", roma:"nihongowobenkyoushiteimasu", en:"Tôi đang học tiếng Nhật" },
+  { hira:"まいにちがっこうへいきます", kata:"マイニチガッコウヘイキマス", roma:"mainichigakkouheikimasu", en:"Ngày nào cũng đi học" },
+  { hira:"このほんはとてもおもしろいです", kata:"コノホンハトテモオモシロイデス", roma:"konohonhatotemoomoshiroidesu", en:"Quyển sách này rất thú vị" },
+  { hira:"さくらがきれいにさきました", kata:"サクラガキレイニサキマシタ", roma:"sakuragakireinisakimashita", en:"Hoa anh đào nở rất đẹp" },
+  { hira:"ともだちとえいがをみました", kata:"トモダチトエイガヲミマシタ", roma:"tomodachitoeigawomimashita", en:"Xem phim cùng bạn" },
+  { hira:"あさごはんをたべませんでした", kata:"アサゴハンヲタベマセンデシタ", roma:"asagohanwotabemasendeshita", en:"Đã không ăn sáng" },
+  { hira:"でんしゃがおくれてしまいました", kata:"デンシャガオクレテシマイマシタ", roma:"denshagaokureteshimaimashita", en:"Tàu bị trễ" },
+  { hira:"にほんへいきたいとおもいます", kata:"ニホンヘイキタイトオモイマス", roma:"nihonheikitaito omoimasu", en:"Tôi muốn đi Nhật" },
 ];
-while (SENTENCE_100.length < 100) {
-  const b = SENTENCE_100[SENTENCE_100.length % 10];
-  SENTENCE_100.push({...b, roma: b.roma + (SENTENCE_100.length % 7), hira: b.hira });
-}
 
-type Mode = "kanaToRoma" | "romaToKana";
-type Question = { id: number; kind: "vocab" | "sentence"; kana: string; kata: string; roma: string; en: string; isHira: boolean; };
+type Mode = "kanaToRoma" | "romaToKana" | "randomField";
+type Field = "hira" | "kata" | "roma" | "en";
+
+type Question = {
+  id: number;
+  kind: "vocab" | "sentence";
+  kana: string; // text hiển thị chính
+  roma: string;
+  en: string;
+  promptField: Field;
+  answerField: Field;
+  promptText: string;
+  expectedText: string;
+  vocab: Vocab | Sentence;
+};
 
 export default function Test() {
   const [mode, setMode] = useState<Mode>("kanaToRoma");
@@ -55,98 +46,90 @@ export default function Test() {
   const [timeLeft, setTimeLeft] = useState(30 * 60);
 
   const generate = () => {
-    const v = [...VOCAB_100].sort(() => 0.5 - Math.random()).slice(0, 10);
-    const s = [...SENTENCE_100].sort(() => 0.5 - Math.random()).slice(0, 10);
-    const all = [...v.map(q => ({...q, kind:"vocab" as const})),...s.map(q => ({...q, kind:"sentence" as const}))]
-     .sort(() => 0.5 - Math.random())
-     .map((q, i) => ({
-        id: i,
-        kind: q.kind,
-        kana: Math.random() > 0.5? q.hira : q.kata,
-        kata: q.kata,
-        roma: q.roma,
-        en: q.en,
-        isHira: q.hira.length % 2 === 0
-      }));
-    setQuestions(all);
-    setAnswers(Array(20).fill(""));
-    setIdx(0);
-    setInput("");
-    setTimeLeft(30*60);
-    setStarted(true);
-    setFinished(false);
+    let qs: Question[] = [];
+    if (mode === "randomField") {
+      // Mode 3: đi hết danh sách từ theo thứ tự ngẫu nhiên, mỗi từ random field hỏi/đáp
+      const shuffled = [...VOCAB_EASY_KATA].sort(() => 0.5 - Math.random());
+      const fields: Field[] = ["hira","kata","roma","en"];
+      qs = shuffled.map((v, i) => {
+        const promptField = fields[Math.floor(Math.random()*4)];
+        let answerField: Field = fields[Math.floor(Math.random()*4)];
+        while (answerField === promptField) answerField = fields[Math.floor(Math.random()*4)];
+        return {
+          id: i,
+          kind: "vocab" as const,
+          kana: (v as any)[promptField],
+          roma: v.roma,
+          en: v.en,
+          promptField,
+          answerField,
+          promptText: (v as any)[promptField],
+          expectedText: (v as any)[answerField],
+          vocab: v
+        };
+      });
+    } else {
+      // Mode 1 & 2 cũ: 10 vocab + 10 câu
+      const v10 = [...VOCAB_EASY_KATA].sort(() => 0.5 - Math.random()).slice(0, 10);
+      const s10 = [...SENTENCE_100].sort(() => 0.5 - Math.random()).slice(0, 10);
+      const mixed = [...v10.map(v=>({k:"vocab" as const, d:v})),...s10.map(s=>({k:"sentence" as const, d:s}))].sort(()=>0.5-Math.random());
+      qs = mixed.map((q,i)=>{
+        const isHira = Math.random()>0.5;
+        const promptText = mode==="kanaToRoma"? (isHira? (q.d as any).hira : (q.d as any).kata) : (q.d as any).roma;
+        const expectedText = mode==="kanaToRoma"? (q.d as any).roma : (isHira? (q.d as any).hira : (q.d as any).kata);
+        return {
+          id:i, kind:q.k, kana:promptText, roma:(q.d as any).roma, en:(q.d as any).en,
+          promptField: mode==="kanaToRoma"? (isHira?"hira":"kata" as Field) : "roma",
+          answerField: mode==="kanaToRoma"? "roma" : (isHira?"hira":"kata" as Field),
+          promptText, expectedText, vocab: q.d as any
+        };
+      });
+    }
+    setQuestions(qs);
+    setAnswers(Array(qs.length).fill(""));
+    setIdx(0); setInput(""); setTimeLeft(30*60); setStarted(true); setFinished(false);
   };
 
   useEffect(() => {
     if (!started || finished) return;
-    const t = setInterval(() => {
-      setTimeLeft(v => {
-        if (v <= 1) { setFinished(true); return 0; }
-        return v-1;
-      });
-    }, 1000);
+    const t = setInterval(() => setTimeLeft(v => { if (v <= 1) { setFinished(true); return 0; } return v-1; }), 1000);
     return () => clearInterval(t);
   }, [started, finished]);
 
   const current = questions[idx];
-  const progress = useMemo(() => ((idx)/20)*100, [idx]);
+  const fmt = (s:number) => `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;
 
-  const checkNext = () => {
-    const newAns = [...answers];
-    newAns[idx] = input.trim();
-    setAnswers(newAns);
-    setInput(newAns[idx+1] || "");
-    if (idx === 19) setFinished(true);
-    else setIdx(i => i+1);
+  const next = () => {
+    const na = [...answers]; na[idx] = input.trim(); setAnswers(na);
+    setInput(na[idx+1] || "");
+    if (idx === questions.length-1) setFinished(true); else setIdx(i=>i+1);
   };
 
   const score = useMemo(() => {
     if (!finished) return 0;
     let c=0;
     questions.forEach((q,i)=>{
-      const ans = (answers[i]||"").toLowerCase().trim();
-      if (mode==="kanaToRoma") {
-        if (ans === q.roma.toLowerCase()) c++;
-      } else {
-        if (ans === q.kana.toLowerCase() || ans === q.kata.toLowerCase()) c++;
-      }
+      const ans = (answers[i]||"").trim().toLowerCase();
+      const exp = (q.expectedText||"").trim().toLowerCase();
+      if (ans === exp) c++;
     });
     return c;
-  }, [finished, questions, answers, mode]);
+  }, [finished, questions, answers]);
 
-  const fmt = (s:number) => `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;
+  const fieldLabel = (f: Field) => ({hira:"Hiragana", kata:"Katakana", roma:"Romaji", en:"Tiếng Việt"}[f]);
 
   if (!started) {
     return (
       <div className="test-page">
-        <div className="page-top-title">
-          <div>
-            <h1>テスト <span style={{color:"#8b5cf6"}}>20 câu - 30p</span></h1>
-            <p>10 từ vựng (từ 100) + 10 câu dài 20-30 chữ (từ 100 câu). 2 mode.</p>
-          </div>
-        </div>
-
+        <div className="page-top-title"><div><h1>テスト <span style={{color:"#8b5cf6"}}>3 Mode</span></h1><p>{VOCAB_EASY_KATA.length} từ dễ tách file riêng. Mode 3 random field đến hết list.</p></div></div>
         <div className="kana-card test-setup-card">
           <h3>Chọn chế độ</h3>
-          <div className="choice-grid">
-            <button className={`quiz-card ${mode==="kanaToRoma"?"correct":""}`} onClick={()=>setMode("kanaToRoma")}>
-              <b>Hira/Kata → Romaji</b>
-              <span>Nhìn ひらがな / カタカナ, gõ roma</span>
-            </button>
-            <button className={`quiz-card ${mode==="romaToKana"?"correct":""}`} onClick={()=>setMode("romaToKana")}>
-              <b>Romaji → Hira/Kata</b>
-              <span>Nhìn romaji, gõ lại kana</span>
-            </button>
+          <div className="choice-grid" style={{display:"grid", gridTemplateColumns:"1fr", gap:10}}>
+            <button className={`quiz-card ${mode==="kanaToRoma"?"correct":""}`} onClick={()=>setMode("kanaToRoma")}><b>1. Hira/Kata → Romaji</b><span>10 từ + 10 câu, 20 câu</span></button>
+            <button className={`quiz-card ${mode==="romaToKana"?"correct":""}`} onClick={()=>setMode("romaToKana")}><b>2. Romaji → Hira/Kata</b><span>10 từ + 10 câu, 20 câu</span></button>
+            <button className={`quiz-card ${mode==="randomField"?"correct":""}`} onClick={()=>setMode("randomField")}><b>3. Random Field (MỚI)</b><span>Đi hết {VOCAB_EASY_KATA.length} từ, random thứ tự. Đề là 1 trong 4 loại hira/kata/roma/en, đáp án là 1 loại khác</span></button>
           </div>
-          <button className="test-start-btn" onClick={generate}>Bắt đầu Test</button>
-          <div className="explain-box" style={{marginTop:16}}>
-            <h4>Luật</h4>
-            <ul>
-              <li>20 câu, 30 phút, hết giờ tự nộp</li>
-              <li>Không hiện đáp án giữa chừng, chỉ chấm khi xong</li>
-              <li>Câu dài ~20-30 ký tự, phân biệt vocab/sentence bằng tag</li>
-            </ul>
-          </div>
+          <button className="test-start-btn" onClick={generate}>Bắt đầu Test - {mode==="randomField"? `${VOCAB_EASY_KATA.length} câu` : "20 câu"} - 30p</button>
         </div>
       </div>
     );
@@ -156,21 +139,15 @@ export default function Test() {
     return (
       <div className="test-page">
         <div className="kana-card test-result-card">
-          <h2>Kết quả: {score}/20</h2>
-          <p className="test-time">Thời gian còn lại: {fmt(timeLeft)} - Mode: {mode}</p>
+          <h2>Kết quả: {score}/{questions.length}</h2>
+          <p className="test-time">Còn lại: {fmt(timeLeft)} - Mode: {mode}</p>
           <div className="test-review">
             {questions.map((q,i)=>{
-              const ok = mode==="kanaToRoma"? answers[i]?.toLowerCase()===q.roma.toLowerCase() : (answers[i]===q.kana || answers[i]===q.kata);
-              return (
-                <div key={i} className={`test-review-row ${ok?"ok":"fail"}`}>
-                  <span className="num">{i+1}. {q.kind}</span>
-                  <span className="q">{mode==="kanaToRoma"?q.kana:q.roma}</span>
-                  <span className="a">Bạn: {answers[i]||"(trống)"} | Đáp: {mode==="kanaToRoma"?q.roma:q.kana}</span>
-                </div>
-              );
+              const ok = (answers[i]||"").toLowerCase().trim() === q.expectedText.toLowerCase().trim();
+              return <div key={i} className={`test-review-row ${ok?"ok":"fail"}`}><span className="num">{i+1}. [{fieldLabel(q.promptField)} → {fieldLabel(q.answerField)}]</span><span className="q">{q.promptText}</span><span className="a">Bạn: {answers[i]||"(trống)"} | Đáp: {q.expectedText} ({(q.vocab as any).en})</span></div>
             })}
           </div>
-          <button className="test-start-btn" onClick={generate}>Làm lại Test mới</button>
+          <button className="test-start-btn" onClick={generate}>Làm lại</button>
         </div>
       </div>
     );
@@ -179,33 +156,22 @@ export default function Test() {
   return (
     <div className="test-page">
       <div className="test-header">
-        <div className="test-progress-bar"><div style={{width:`${progress}%`}} /></div>
+        <div className="test-progress-bar"><div style={{width:`${(idx/questions.length)*100}%`}} /></div>
         <div className="test-header-row">
-          <span>Câu {idx+1}/20 <span className={`tag ${current?.kind}`}>{current?.kind}</span></span>
+          <span>Câu {idx+1}/{questions.length} <span className="tag vocab">{fieldLabel(current?.promptField)} → {fieldLabel(current?.answerField)}</span></span>
           <span className={`test-timer ${timeLeft<300?"danger":""}`}>{fmt(timeLeft)}</span>
         </div>
       </div>
-
       <div className="quiz-card test-quiz-card">
-        <div className="kana-big asian-big">{mode==="kanaToRoma"? current?.kana : current?.roma}</div>
-        <div className="test-en-hint">{current?.en}</div>
-
-        <div className="input-row">
-          <input
-            value={input}
-            onChange={e=>setInput(e.target.value)}
-            onKeyDown={e=>e.key==="Enter"&&checkNext()}
-            placeholder={mode==="kanaToRoma"? "gõ romaji..." : "gõ hiragana / katakana..."}
-            autoFocus
-          />
-          <button onClick={checkNext}>{idx===19?"Nộp":"Tiếp"}</button>
+        <div className="kana-big asian-big">{current?.promptText}</div>
+        <div className="test-en-hint">Đề: {fieldLabel(current?.promptField)} | Cần điền: {fieldLabel(current?.answerField)} {current?.answerField==="en"? `(${(current?.vocab as any).kata})` : ""}</div>
+        <div className="input-row" style={{display:"flex", gap:8, marginTop:18}}>
+          <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&next()} placeholder={`gõ ${fieldLabel(current?.answerField).toLowerCase()}...`} autoFocus style={{flex:1, padding:"12px 14px", borderRadius:10, border:"1px solid #2a344b", background:"#0f1219", color:"#e2e8f0"}}/>
+          <button onClick={next} style={{padding:"12px 18px", borderRadius:10, border:"1px solid #8b5cf6", background:"#8b5cf6", color:"white", fontWeight:700}}>{idx===questions.length-1?"Nộp":"Tiếp"}</button>
         </div>
       </div>
-
-      <div className="test-nav-dots">
-        {questions.map((_,i)=>(
-          <span key={i} className={`${i===idx?"active":""} ${answers[i]?"done":""}`} onClick={()=>{setIdx(i); setInput(answers[i]||"");}} />
-        ))}
+      <div className="test-nav-dots" style={{display:"flex", gap:5, flexWrap:"wrap", justifyContent:"center", marginTop:18, maxHeight:80, overflow:"auto"}}>
+        {questions.map((_,i)=><span key={i} style={{width:8,height:8,borderRadius:"50%",background:i===idx?"#8b5cf6":answers[i]?"#2a344b":"#1c2333",border:"1px solid #2a344b", cursor:"pointer"}} onClick={()=>{setIdx(i); setInput(answers[i]||"");}} />)}
       </div>
     </div>
   );
