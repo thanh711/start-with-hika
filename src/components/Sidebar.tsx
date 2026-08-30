@@ -12,6 +12,8 @@ const menu: MenuItem[] = [
   { path: "/kana", label: "🅰 Katakana", shortLabel: "Katakana" },
   { path: "/test", label: "🧪 Test 20 câu", shortLabel: "Test 20 câu" },
   { path: "/setting", label: "⚙ Cài đặt", shortLabel: "Cài đặt" },
+  { path: "/note", label: "Ghi chú", shortLabel: "Ghi chú" },
+  { path: "/weather", label: "Thời tiết", shortLabel: "Thời tiết" }
 ];
 
 export default function Sidebar() {

@@ -9,7 +9,7 @@ import "./styles/common.css";
 import "./App.css";
 import Home from "./pages/Home";
 import Test from "./pages/Test";
-
+import Note from "./pages/Note";import Weather from "./pages/Weather";
 export default function App() {
   return (
     <BrowserRouter basename="/start-with-hika">
@@ -21,13 +21,14 @@ export default function App() {
             <Route path="/" element={<Navigate to="/vocab" replace />} />
             <Route path="/home" element={<Home />} />
             <Route path="/learn" element={<Learn />} />
-          
-<Route path="/test" element={<Test />} />
+
+            <Route path="/test" element={<Test />} />
             <Route path="/vocab" element={<Vocab />} />
             <Route path="/hiragana" element={<Hiragana />} />
             <Route path="/kana" element={<Katakana />} />
 
             <Route path="/setting" element={<Setting />} />
+            <Route path="/note" element={<Note />} /><Route path="/weather" element={<Weather />} />
             {/* Tất cả route lạ -> về home */}
             <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>

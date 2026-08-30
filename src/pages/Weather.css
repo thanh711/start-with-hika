@@ -1,0 +1,52 @@
+.weather-page { max-width:720px; margin:0 auto; padding:0 16px 24px; color:#e2e8f0; }
+.weather-control { padding:14px; background:#1c2333; border:1px solid #2a344b; border-radius:16px; display:flex; flex-direction:column; gap:12px; }
+.preset-row { display:flex; gap:8px; flex-wrap:wrap; }
+.preset-row.chip { padding:6px 12px; border-radius:99px; border:1px solid #3a4a6b; background:#222e4a; color:#cbd5e1; font-size:12px; cursor:pointer; }
+.preset-row.chip.active { background:#2e2850; border-color:#8b5cf6; color:#ddd6fe; }
+.coord-row { display:flex; gap:8px; }
+.coord-row input { flex:1; padding:10px 12px; border-radius:10px; border:1px solid #3a4a6b; background:#0f1219; color:#f1f5f9; }
+.fetch-btn { padding:10px 16px; border-radius:10px; border:1px solid #8b5cf6; background:#8b5cf6; color:white; font-weight:700; cursor:pointer; }
+
+.weather-current { padding:20px; text-align:center; background:#1c2333; border:1px solid #2a344b; border-radius:16px; margin-top:12px; }
+.weather-current.temp-big { font-size:48px; font-weight:800; color:#f8fafc; }
+.weather-current.desc { font-size:16px; color:#cbd5e1; margin-top:4px; }
+.weather-current.meta { font-size:12px; color:#94a3b8; margin-top:6px; }
+
+.weather-daily,.weather-hourly { padding:16px; background:#1c2333; border:1px solid #2a344b; border-radius:16px; margin-top:12px; }
+.weather-daily h3,.weather-hourly h3 { margin:0 0 12px; color:#f1f5f9; font-size:14px; }
+.daily-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.daily-item { padding:10px; background:#0f1219; border:1px solid #2a344b; border-radius:10px; }
+.daily-item.d-date { font-size:12px; font-weight:700; color:#f1f5f9; }
+.daily-item.d-code { font-size:11px; color:#94a3b8; margin:2px 0; }
+.daily-item.d-temp.max { color:#f8fafc; font-weight:700; }.d-temp.min { color:#94a3b8; margin-left:6px; }
+
+.hourly-scroll { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; }
+.hour-item { min-width:72px; padding:8px; background:#0f1219; border:1px solid #2a344b; border-radius:10px; text-align:center; }
+.hour-item.h-time { font-size:11px; color:#94a3b8; }
+.hour-item.h-temp { font-size:14px; font-weight:800; color:#f1f5f9; margin:4px 0; }
+.hour-item.h-rain { font-size:10px; color:#60a5fa; }
+
+@media(max-width:600px){.daily-grid{grid-template-columns:1fr;}.weather-current.temp-big{font-size:36px;} }
+.day-block { margin-bottom: 14px; }
+.day-label { font-size:12px; font-weight:700; color:#f1f5f9; margin:0 0 6px 2px; }
+.hour-item.h-code { font-size:9px; color:#94a3b8; margin:2px 0; }
+/* thẻ mưa */
+.hour-item.has-rain {
+  background: #1e3a5f!important;
+  border-color: #3b82f6!important;
+}
+.hour-item.has-rain.h-time { color: #93c5fd; }
+.hour-item.has-rain.h-temp { color: #dbeafe; }
+.hour-item.has-rain.h-rain.rain-active {
+  color: #60a5fa;
+  font-weight: 800;
+}
+
+.hour-item.heavy-rain {
+  background: #1e2450!important;
+  border-color: #6366f1!important;
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.4);
+}
+.hour-item.heavy-rain.h-rain.rain-active {
+  color: #a5b4fc;
+}
