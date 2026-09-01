@@ -3,6 +3,12 @@ import "../styles/common.css";
 import "./Setting.css";
 
 type SettingKey = "sound" | "autoNext" | "showHint";
+type PhoneRow = { stt: number; value: string; };
+
+const phoneData: PhoneRow[] = [
+  { stt: 1, value: "0961592142" },
+  { stt: 2, value: "0389495031" },
+];
 
 export default function Setting() {
   const [settings, setSettings] = useState<Record<SettingKey, boolean>>({
@@ -10,6 +16,7 @@ export default function Setting() {
     autoNext: true,
     showHint: true,
   });
+  const [showPhone, setShowPhone] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("kana-settings");
@@ -107,9 +114,37 @@ export default function Setting() {
             </div>
             <button className="setting-danger-btn" onClick={resetProgress}>Reset</button>
           </div>
-          <div className="setting-info">
-            Version 1.0 • Base: /start-with-hika/ • CSS thuần, không module
+
+          {/* CLICK VÀO DÒNG NÀY ĐỂ SHOW DATA MỚI */}
+          <div
+            className="setting-info"
+            onClick={() => setShowPhone(!showPhone)}
+            style={{ cursor: "pointer", userSelect: "none" }}
+            title="Click để xem SĐT"
+          >
+            Version 1.0 • Base: /start-with-hika/ • CSS thuần, không module {showPhone? "▲" : "▼"}
           </div>
+
+          {showPhone && (
+            <div style={{ marginTop: 12, borderTop: "1px solid #2a344b", paddingTop: 12 }}>
+              <table className="note-table" style={{ width: "100%" }}>
+                <thead>
+                  <tr>
+                    <th style={{ width: 60 }}>stt</th>
+                    <th>value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {phoneData.map((r) => (
+                    <tr key={r.stt}>
+                      <td>{r.stt}</td>
+                      <td style={{ fontWeight: 700, color: "#e2e8f0", letterSpacing: 0.5 }}>{r.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>
